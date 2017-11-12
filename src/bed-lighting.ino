@@ -20,7 +20,8 @@ void setup() {
   Log.info("System version: %s", (const char*) System.version());
   Log.info("device id: %s", (const char*) System.deviceID());
 
-  pinMode(PIR_PIN, INPUT);     // declare sensor as input
+  pinMode(PIR_PIN, INPUT);
+  pinMode(D7, OUTPUT);
   startUpTimestamp = millis();
 }
 
@@ -34,6 +35,7 @@ void checkMotion() {
     if (pirState == LOW) {
       // we have just turned on
       Log.info("Motion detected!");
+      digitalWrite(D7, pinValue);
       // We only want to print on the output change, not state
       pirState = HIGH;
     }
@@ -41,6 +43,7 @@ void checkMotion() {
     if (pirState == HIGH){
       // we have just turned of
       Log.info("Motion ended!");
+      digitalWrite(D7, pinValue);
       // We only want to print on the output change, not state
       pirState = LOW;
     }
