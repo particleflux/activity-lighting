@@ -8,11 +8,13 @@
  * PIR mode repeat (H)
  */
 
+#define PIR_INIT_TIME 60000
+
 static const int PIR_PIN = D3;
 
 SerialLogHandler logHandler;
 uint32_t startUpTimestamp;
-int pirState = LOW;             // we start, assuming no motion detected
+int pirState = LOW;
 int pinValue = 0;
 
 void setup() {
@@ -26,26 +28,40 @@ void setup() {
 }
 
 void loop() {
+
+  // TODO wait startup time of PIR sensor until trying to use it (1 minute)
+
   checkMotion();
 }
 
 void checkMotion() {
-  pinValue = digitalRead(PIR_PIN);  // read input pinValue
-  if (pinValue == HIGH) {            // check if the input is HIGH
+  if (!sensorIsInitialized()) {
+    return;
+  }
+
+  pinValue = digitalRead(PIR_PIN);
+  if (pinValue == HIGH) {
     if (pirState == LOW) {
-      // we have just turned on
       Log.info("Motion detected!");
       digitalWrite(D7, pinValue);
-      // We only want to print on the output change, not state
       pirState = HIGH;
     }
   } else {
     if (pirState == HIGH){
-      // we have just turned of
       Log.info("Motion ended!");
       digitalWrite(D7, pinValue);
-      // We only want to print on the output change, not state
       pirState = LOW;
     }
   }
+}
+
+bool sensorIsInitialized() {
+  static bool isInitialized = false;
+
+  if (!isInitialized) {
+    // Log.info("Waiting for PIR to initialize");
+    isInitialized = (millis() - startUpTimestamp) > PIR_INIT_TIME;
+  }
+
+  return isInitialized;
 }
