@@ -1,9 +1,7 @@
 /*
- * Project bed-lighting
- * Description:
- * Author:
- * Date:
- *
+ * Project activity-lighting
+ * Author: Stefan Linke
+*
  * PIR output on D3
  * PIR mode repeat (H)
  */
@@ -64,7 +62,6 @@ void setup() {
 }
 
 void loop() {
-
   checkMotion();
 }
 

@@ -1,6 +1,6 @@
 # activity-lighting
 
-A Particle project for activating an LED strip on movement detection.
+A Particle project for activating an LED strip on movement.
 
 ## Welcome to your project!
 
